@@ -20,3 +20,21 @@
 除了上述经典工作之外，还有一些其他重要方法，例如ＳＵＲＦ特征Speeded-Up Robust Features)、Haar特征、积分图HOG特征、edgelet特征、
 shapeltes特征等。这些特征均是针对图像某一个侧面的描述，例如梯度，颜色，纹理等。
 
+### 基于卷积神经网络的特征学习
+
+![](resource/img/1.png)
+
+
+
+![](resource/img/2.png)
+
+![](resource/img/2-1.png)
+
+
+
+### 目标检测框架的演进
+
+![](resource/img/3.png)
+
+![](resource/img/3-1.png)
+
