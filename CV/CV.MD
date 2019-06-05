@@ -125,14 +125,6 @@ ESR方法来自 Face alignment by explicit shape regression。
 
 3000fps和之前的[ESR][1]使用了同样的cascade的方式，把整个alignment过程分几个stage来做，每一个stage的alignment都依赖上一个stage得到的alignment shape. 
 
-每个stage所做的工作一样，可以分为三个过程
-
-1. 提取特征(shape index feature)
-2. LBF编码(learning local binary feature)
-3. 获取shape 增量(learning global linear regression)
-
-
-
 整个流程基于Cascade Pose Regression(CVPR 2010)，分为T个stage，在训练时步骤如下（testing也类似）
 
 1. 每个stage先抽取local binary features，
@@ -189,7 +181,7 @@ Rt介绍：
 
  
 
-训练过程，就是学习fait和wt的一个过程，[测试](http://lib.csdn.net/base/softwaretest)过程就是用训练好的fait和wt对提取的LBF特征做回归的过程。
+训练过程，就是学习fait和wt的一个过程，[测试](http://lib.csdn.net/base/softwaretest)过程就是用训练好 的fait和wt对提取的LBF特征做回归的过程。
 
 ​         对于每个stage，越往下，所选择的随机点的范围就越小，特征点定位精度就越好。
 
