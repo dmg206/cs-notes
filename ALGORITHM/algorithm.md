@@ -244,9 +244,13 @@ if __name__=='__main__':
 
 
 
-**def sub_sort(array,low,high):**     	key = array[low]     	while low < high:
+**def sub_sort(array,low,high):**     	
 
-​        	# scan high         	while low < high and array[high] >= key:             		high -= 1
+​	key = array[low]     	
+
+​		while low < high: # scan high         	
+
+while low < high and array[high] >= key:             		high -= 1
 
 ​        	if low<high:
 
@@ -275,4 +279,3 @@ if __name__=='__main__':
 改进算法：希尔，堆，归并，快速
 
 ![img](https:////note.youdao.com/src/52B818A970C34A4FB421F698CC1E4D93)
-
