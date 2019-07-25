@@ -32,6 +32,24 @@ shapeltes特征等。这些特征均是针对图像某一个侧面的描述，�
 
 ![](resource/img/3-1.png)
 
+
+
+one stage:
+
+Yolo
+
+SSD
+
+Two stage:
+
+**R-CNN -> SPP Net -> Fast R-CNN -> Faster R-CNN -> Mask R-CNN**
+
+
+
+
+
+
+
 基于hog的人脸检测器，单一的人脸检测器是基于正脸的，对于侧脸的检测效果并不好。那么我们可以单独训练侧脸的人脸检测器，然后多个detector联合使用。
 
 串联所有人脸检测器一起使用的好处是，全图的fhog特征只需要提取一遍即可。 
