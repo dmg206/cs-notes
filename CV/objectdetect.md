@@ -22,16 +22,12 @@ Hi, it is not used in our torch model. We add a parallel SPPE when using the SST
 
 
 
-### crowpose
-
-
+### crowdpose
 
 
 
 我觉得文章最主要的地方在于提出target joints和interference joints这个概念,因为以往从来没想过, 都是直接保留target joints, 非target joints就直接抑制掉了.文章保留了这两类点,并且打上不同比重的label, 从而让网络有意的去学习这两类点,最后再通过构建图的方法来求得最优解.
 --------------------- 
-
-
 
 
 

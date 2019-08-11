@@ -235,3 +235,10 @@ St =St-1 +ΔSt (2)
 ### dl
 
 ![image-20190707153614745](/Users/leon/study/github/cs-notes/CV/resource/img/image-20190707153614745.png)
+
+正则化：
+
+l1正则化可以产生稀疏矩阵，进而可以用于特征选择
+
+l2正则化：拟合过程中通常都倾向于让权值尽可能小
+
