@@ -6,10 +6,6 @@
 
 
 
-
-
-
-
 创新点：提出RMPE
 
 Hi, it is not used in our torch model. We add a parallel SPPE when using the SSTN and it should be discarded during testing period. However, torch doesn't support loading part of the model during testing and this will affect our inference efficiency. Caffe supports loading part of the weights, thus you can find SSTN in our old repo: <https://github.com/MVIG-SJTU/RMPE>, which is implemented in Caffe
@@ -24,12 +20,32 @@ Hi, it is not used in our torch model. We add a parallel SPPE when using the SST
 
 ### crowdpose
 
+论文的贡献：
 
+1，我觉得文章最主要的地方在于提出target joints和interference joints这个概念,因为以往从来没想过, 都是直接保留target joints, 非target joints就直接抑制掉了.文章保留了这两类点,并且打上不同比重的label, 从而让网络有意的去学习这两类点,最后再通过构建图的方法来求得最优解.
 
-我觉得文章最主要的地方在于提出target joints和interference joints这个概念,因为以往从来没想过, 都是直接保留target joints, 非target joints就直接抑制掉了.文章保留了这两类点,并且打上不同比重的label, 从而让网络有意的去学习这两类点,最后再通过构建图的方法来求得最优解.
---------------------- 
+Different from previous methods that only predict target joints for input human proposals, our joint-candidate SPPE outputs a list of candidate locations for each joint. The candidate list includes target and
+interference joints. Then our association algorithm utilizes these candidates to build a person-joint connection graph. At last, we solve the joint association problem in this graph model with a global maximum joints association algorithm.
 
+2，为了更好的评估crowed场景下算法的姿态估计效果，收集了一个dataset of crowded human poses
 
+效果：
+
+5.2mAP
+
+方法：
+
+Joint-Candidates SPPE(JC SPPE)
+
+heatmap loss:
+
+![image-20190816232300446](/Users/leon/study/github/cs-notes/CV/resource/image-20190816232300446.png)
+
+u是衰减系数，T目标关节的的heatmap，T目标关节的heatmap,C是干扰关节的heat map
+
+干扰关节在预测其他人的关节将会很有效的。在全局视野上看，可以看成是一种交叉验证。u设置为0.5，传统的heatmap函数可以看成是u=0.
+
+在crowd场景下， human proposals 是高度overlaped的，overlaped的human proposals 将会预测出高一joints，crowdpose通过全局匹配可以解决这一问题
 
 | 开源系统              | 准确率 | 平均速度 |
 | :-------------------- | :----- | :------- |
