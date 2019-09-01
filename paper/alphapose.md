@@ -26,6 +26,54 @@ AlphaPose 系统目前在COCO的 Validation 集上的运行速度是 20FPS（平
 
 
 
+**parametric Pose NMS**
+
+
+
+* Why nms:
+
+因为human detectors 可能会产生多余的检测，那么自然的也会有多余的pose estimations,NMS就是为了去除这些冗余。 和通常的NMS差不多的过程，就是先在里面选择score最高的那个，然后删除掉和其离的比较近的，一直重复这个过程直到没有。
+
+* 删除准则
+
+  什么样的才算离的近，这里就有一个距离的定义问题，或者相似度的一个充度量，按Paper里面是公示（7）
+
+  ![image-20190901210840804](/Users/leon/study/github/cs-notes/CV/resource/img/image-20190901210840804.png)
+
+![image-20190901211720837](/Users/leon/study/github/cs-notes/CV/resource/img/image-20190901211720837.png)
+
+\eta 是个阈值，距离小于\eta的时候f取1，代表pi应该被deleted， 否则取0， \Lambda是d的参数
+
+* pose distance
+
+  ![image-20190901214321532](/Users/leon/study/github/cs-notes/CV/resource/img/image-20190901214321532.png)
+
+* part 之间的空间距离
+
+  ![image-20190901214600110](/Users/leon/study/github/cs-notes/CV/resource/img/image-20190901214600110.png)
+
+![image-20190901214654929](/Users/leon/study/github/cs-notes/CV/resource/img/image-20190901214654929.png)
+
+因为有4个参数，一起优化的太难了，所以现在的方法是每次优化两个参数，固定其他两个，直至收敛.
+
+
+
+**PGPG **
+
+对于SSTN-SPPE模块而言，因为需要网络来适应由human detector 产生的 可能并不太完美的bbox proposals，所以很有必要来做数据增强。否则的话，因为测试阶段仍然是需要human detector的，可能会导致效果不太好。一个自然的想法是，训练时直接使用human detector产生的bbox。 现在有了ground truth的pose，再加上human detector又会对每个人产生bbox， 这样的话就会有很多的training proposals了，并且因为它们都是human detector的输出，
+
+* gt的pose
+
+  ![image-20190901222238055](/Users/leon/study/github/cs-notes/CV/resource/img/image-20190901222238055.png)
+
+即希望学得那个分布P，是proposals与gt-bbox之间的偏移相对于gt pose的条件分布。
+
+* Proposals Generation
+
+在SSTN+SPPE的训练阶段，对于训练样本中每个带注释的姿势，我们首先查找相应的原子姿态a。然后我们根据P（δB| a）通过密集采样产生额外的偏移，以产生增强训练的proposals。
+
+
+
 ###Poseflow
 
 复杂场景下多人关节姿态跟踪，论文设计了一个在线的优化网络建立帧间姿态关系，并形成姿态流，此外设计了一个姿态流非极大值抑制减少冗余姿态流，重新建立时间上不相交姿态的联系。
@@ -66,4 +114,4 @@ Ti是目标关节的heatmap, Ci是干扰关节的heatmap。u=0.5是干扰关节�
 
 2、研究具有多个输入或多个输出分支图层的DCNNs初始化问题，提出有效的初始化方案，可用于inception和ResNets等模型。
 
-# 3、解决由identity mapping引起的激活方差积累的问题。
+3、解决由identity mapping引起的激活方差积累的问题。
