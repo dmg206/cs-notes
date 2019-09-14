@@ -22,6 +22,10 @@ AlphaPose 系统目前在COCO的 Validation 集上的运行速度是 20FPS（平
 
 ### RMPE
 
+为解决这一问题，作者提出了使用对称空间变换网络（Symmetric Spatial Transformer Network，SSTN）来从不准确的候选框中抽取高质量的单人区域。然后，作者使用了一个单人的姿态估计器（Single Person Pose Estimator，SPPE）来从抽取到的区域中估计此人的姿态骨架。接着，作者用一个空间逆变换网络（Spatial De-Transformer Network，SDTN），将估计出的姿态重新映射到图像坐标系下。最后，用一个参数化的姿态非极大抑制（Non-Maximum Suppression，NMS）方法来处理重复预测的问题。
+
+另外，作者还引入了一种姿态候选生成器（Pose Guided Proposals Generator），来增广训练样本，以便更好地训练 SPPE 和 SSTN 网络。RMPE 的显著特征是，该方法可以推广到任意的人体检测算法和 SSPE 的组合。
+
 如图3所示。首先通过目标检测算法，得到人体的区域框。然后将该区域框输入到STN+SPPE模块中，自动检测人体姿态。再通过PP-NMS进行refine。在训练过程中，使用Parallel SPPE来避免局部最优并进一步提升SSTN的效果。设计PGPG结构来增强已有的训练集。
 
 
