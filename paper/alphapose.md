@@ -8,7 +8,7 @@ AlphaPose
 
 为了在兼顾速度的同时保持精度，**新版AlphaPose提出了一个新的姿态估计模型**。模型的骨架网络使用 ResNet101，同时在其下采样部分添加 SE-block 作为 attention 模块——已经有很多实验证明，在 Pose Estimation 模型中引入 attention 模块能提升模型的性能，而仅在下采样部分添加 SE-block 能使 attention 以更少的计算量发挥更好的效果。
 
-除此之外，使用 **PixelShuffle + Conv** 进行3次上采样，输出关键点的热度图。传统的上采样方法会使用反卷积或双线性插值。而使用 PixelShuffle 的好处在于，在提高分辨率的同时，保持特征信息不丢失。对比双线性插值，运算量低；对比反卷积，则不会出现网格效应。
+除此之外，使用 **PixelShuffle + Conv** 进行3次上采样，输出关键点的heatmap。传统的上采样方法会使用反卷积或双线性插值。***而使用 PixelShuffle 的好处在于，在提高分辨率的同时，保持特征信息不丢失***。对比双线性插值，运算量低；对比反卷积，则不会出现网格效应。
 
 在系统架构方面，新版 AlphaPose 采用**多级流水**的工作方式，使用多线程协作，将速度发挥到极致。
 
@@ -66,11 +66,11 @@ AlphaPose 系统目前在COCO的 Validation 集上的运行速度是 20FPS（平
 
 对于SSTN-SPPE模块而言，因为需要网络来适应由human detector 产生的 可能并不太完美的bbox proposals，所以很有必要来做数据增强。否则的话，因为测试阶段仍然是需要human detector的，可能会导致效果不太好。一个自然的想法是，训练时直接使用human detector产生的bbox。 现在有了ground truth的pose，再加上human detector又会对每个人产生bbox， 这样的话就会有很多的training proposals了，并且因为它们都是human detector的输出，
 
-* gt的pose
+* groud true的pose
 
 ![image-20190901222238055](../CV/resource/img/image-20190901222238055.png)
 
-即希望学得那个分布P，是proposals与gt-bbox之间的偏移相对于gt pose的条件分布。
+即希望学得那个分布P，是proposals与groud true-bbox之间的偏移相对于gt pose的条件分布。
 
 * Proposals Generation
 
@@ -80,11 +80,27 @@ AlphaPose 系统目前在COCO的 Validation 集上的运行速度是 20FPS（平
 
 ###Poseflow
 
+本文主要是关于人体姿态跟踪方面的内容。在对视频每一帧人体姿态估计完成之后，通过分析前后若干帧之间的人体姿态关系来完成人体姿态跟踪问题。
+
 复杂场景下多人关节姿态跟踪，论文设计了一个在线的优化网络建立帧间姿态关系，并形成姿态流，此外设计了一个姿态流非极大值抑制减少冗余姿态流，重新建立时间上不相交姿态的联系。
 
-Pose Flow Building
+3 Our Proposed Approach
 
-Pose Flow NMS
+这里定义了一些姿态度量：
+Intra-Frame Pose Distance ： 这个距离主要衡量同一帧内两个姿态的相似度
+
+Inter-frame Pose Distance ：这个距离主要衡量相邻帧内两个姿态的相似度
+
+3.2 Multi-Person Pose Estimation
+多人姿态估计这里我们使用 RMPE 方法， Faster R-CNN+ 改进的 SPPE
+
+3.3 Pose Flow Building
+Pose flows are built by associating poses that indicates the same person across frames.
+
+PF-Builder：生成pose flow
+PF-NMS：在pose flow中应用了非极大值抑制（之前的方法大部分是在单帧图像上做NMS）
+
+本文的思路主要借鉴多目标跟踪问题中的目标相关性分析
 
 ### crowdpose
 
